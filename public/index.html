@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<title>MCT Exercise</title>
+		<link href="/styles.css" rel="stylesheet" />
+		<script src="/main.js"></script>
+	</head>
+	<body>
+		<form id="controls">
+			<span>Sort data: </span>
+			<input type="radio" id="desc" name="sort_order" value="desc" checked />
+			<label for="desc">descending</label>
+			<input type="radio" id="asc" name="sort_order" value="asc" />
+			<label for="asc">ascending</label>
+
+			<input type="submit" value="Get Telemetry" id="submit-button" />
+		</form>
+		<table id="history">
+			<thead>
+				<th>ID</th>
+				<th>Timestamp</th>
+				<th>Value</th>
+			</thead>
+		</table>
+	</body>
+</html>

@@ -1,8 +1,8 @@
-#openmct-exercise
+# openmct-exercise
 
 Demo of an SPA that connects to and displays data from an MCT telemetry server.
 
-###To run the applications:
+### To run the applications:
 
 You will need to have the open-mct tutorial server up and running. Instructions for download and setup as follows:
 

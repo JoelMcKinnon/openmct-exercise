@@ -11,7 +11,7 @@ You will need to have the open-mct tutorial server up and running. Instructions 
 `npm install`  
 `npm start`
 
-Telemetry app should be running on localhost:8080.
+**Telemetry app should be running on localhost:8080.**
 
 Next, clone this repository and follow the steps below:
 
@@ -20,7 +20,7 @@ Next, clone this repository and follow the steps below:
 `npm install`  
 `nodemon index`
 
-Exercise app should be running on localhost:4000.
+**Exercise app should be running on localhost:4000.**
 
 You should see a small form and a row of table headers for ID, Timestamp and Value. The radio buttons allow selection of sort order descending or ascending by timestamp, with a default of descending. Clicking on the _Get Telemetry_ button will populate the table with the three columns of data received from the telemetry server. The time range is set to the fifteen minutes preceding the current moment.
 

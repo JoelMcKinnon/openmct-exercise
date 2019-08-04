@@ -1,5 +1,6 @@
 body {
   font-family: sans-serif;
+  margin: 40px;
 }
 
 table {
@@ -28,15 +29,25 @@ table tr.selected {
 }
 
 form {
-  margin: 10px 0;
+  margin: 20px 0;
+}
+
+form span {
+  margin-right: 5px;
+}
+
+form label {
+  margin-right: 5px;
 }
 
 form input[type='submit'] {
-  padding: 2px 5px;
-  background-color: lightblue;
-  border-radius: 2px;
+  padding: 5px 10px;
+  background-color: rgb(81, 81, 247);
+  border-radius: 4px;
   font-size: 1em;
-  color: #000;
+  color: #fff;
   margin-left: 10px;
   cursor: pointer;
+  box-shadow: 2px 2px lightblue;
+  border: none;
 }

@@ -6,8 +6,9 @@ To run the application:
 
 You will need to have the open-mct tutorial server up and running. Instructions for download and setup as follows:
 
-git clone ​https://github.com/nasa/openmct-tutorial.git cd openmct-tutorial
-npm install
+git clone ​https://github.com/nasa/openmct-tutorial.git  
+cd openmct-tutorial  
+npm install  
 npm start
 
 App should be running on localhost:8080.
@@ -16,7 +17,7 @@ Next, clone this repository and follow the steps below:
 
 git clone https://github.com/JoelMcKinnon/openmct-exercise.git
 
-npm install
+npm install  
 nodemon index
 
 App should be running on localhost:4000.

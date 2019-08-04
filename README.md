@@ -15,7 +15,8 @@ Telemetry app should be running on localhost:8080.
 
 Next, clone this repository and follow the steps below:
 
-`git clone https://github.com/JoelMcKinnon/openmct-exercise.git`
+`git clone https://github.com/JoelMcKinnon/openmct-exercise.git`  
+`cd openmct-exercise`  
 `npm install`  
 `nodemon index`
 

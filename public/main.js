@@ -11,7 +11,7 @@ const populateTableRows = sortOrder => {
 	const tbody = document.createElement("tbody");
 	histTable.append(tbody);
 
-	// close any open socket connection before getting new telemetry (JOEL: hits ws.close() on line 105 but does not close socket)
+	// close any open socket connection before getting new telemetry
 	modifySubscriptions(tbody, sortOrder);
 
 	// get history telemetry
@@ -34,14 +34,11 @@ const populateTableRows = sortOrder => {
 	xhr.send();
 };
 
-// config controls form to activate table render
-const form = document.querySelector("#controls");
-const sortOrder = document.querySelector(`input[name="sort_order"]:checked`)
-	.value;
-
-// define submit action
-form.addEventListener("submit", event => {
+// define submit action capturing checked value for sort_order
+document.querySelector("#controls").addEventListener("submit", event => {
 	event.preventDefault();
+	const sortOrder = document.querySelector('input[name="sort_order"]:checked')
+		.value;
 	populateTableRows(sortOrder);
 });
 
@@ -93,6 +90,29 @@ function renderRow(tbody, data, sortOrder) {
 	}
 }
 
+function renderDoubleRow(tbody, dataArr, sortOrder) {
+	let newRows = document.createDocumentFragment();
+	let newRow1 = document.createElement("tr");
+	let newRow2 = document.createElement("tr");
+	newRow1.innerHTML = `
+		<td class="id">${dataArr[0].id}</td>
+		<td>${formatDate(dataArr[0].timestamp)}</td>
+		<td>${dataArr[0].value}</td>
+	`;
+	newRow2.innerHTML = `
+		<td class="id">${dataArr[1].id}</td>
+		<td>${formatDate(dataArr[1].timestamp)}</td>
+		<td>${dataArr[1].value}</td>
+	`;
+	newRows.appendChild(newRow1);
+	newRows.appendChild(newRow2);
+	if (sortOrder && sortOrder === "desc") {
+		tbody.insertBefore(newRows, tbody.firstChild);
+	} else {
+		tbody.append(newRows);
+	}
+}
+
 // delete rows outside of selection range
 function removeUnselectedRows(tbody, range) {
 	const rowTotal = tbody.rows.length;
@@ -118,6 +138,10 @@ function removeUnselectedRows(tbody, range) {
 // do all websocket operations
 function modifySubscriptions(tbody, sortOrder) {
 	const ws = new WebSocket("ws://localhost:8080/realtime");
+	const now = new Date().getTime();
+	const subscribeTypes = getSubscribeTypes(tbody)[0];
+	const unsubscribeTypes = getSubscribeTypes(tbody)[1];
+	const dataArr = [];
 
 	// open socket and subscribe/unsubscribe as needed
 	ws.onopen = event => {
@@ -125,17 +149,44 @@ function modifySubscriptions(tbody, sortOrder) {
 			ws.close();
 			return;
 		}
-		getSubscribeTypes(tbody)[0].forEach(dataType => {
+		subscribeTypes.forEach(dataType => {
 			ws.send(`subscribe ${dataType}`);
 		});
-		getSubscribeTypes(tbody)[1].forEach(dataType => {
+		unsubscribeTypes.forEach(dataType => {
 			ws.send(`unsubscribe ${dataType}`);
 		});
 	};
 
 	// render new rows for all new data received
 	ws.onmessage = function(event) {
-		renderRow(tbody, JSON.parse(event.data), sortOrder);
+		const timeStamp = JSON.parse(event.data).timestamp;
+		const timeLimit = 300000; // 5 min
+
+		// limit rows displayed to timeLimit
+		if (timeStamp - now > timeLimit) {
+			if (sortOrder === "asc") {
+				tbody.deleteRow(tbody.firstChild);
+			} else {
+				tbody.removeChild(tbody.lastChild);
+			}
+		}
+		// render single row
+		if (subscribeTypes.length === 1) {
+			renderRow(tbody, JSON.parse(event.data), sortOrder);
+		} else {
+			// render double row
+			dataArr.push(JSON.parse(event.data));
+			if (dataArr.length === 2) {
+				renderDoubleRow(tbody, dataArr, sortOrder);
+				dataArr.length = 0;
+			}
+		}
+
+		if (sortOrder === "asc") {
+			// scroll to bottom of document
+			window.scrollTo(0, document.body.scrollHeight);
+			// tbody.lastChild.scrollIntoView();
+		}
 	};
 
 	ws.onerror = error => {
